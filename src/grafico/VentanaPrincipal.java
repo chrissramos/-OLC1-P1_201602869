@@ -44,6 +44,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         txtArchivo2 = new javax.swing.JTextArea();
         lblArchivo1 = new javax.swing.JLabel();
         lblArchivo2 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -71,7 +82,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         txtArchivo1.setRows(5);
         jScrollPane1.setViewportView(txtArchivo1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 110, 200, 340));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 230, 350));
 
         txtArchivo2.setBackground(new java.awt.Color(29, 41, 81));
         txtArchivo2.setColumns(20);
@@ -80,21 +91,79 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         txtArchivo2.setRows(5);
         jScrollPane2.setViewportView(txtArchivo2);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 510, 200, 250));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 60, 230, 360));
 
-        lblArchivo1.setFont(new java.awt.Font("Lucida Sans Typewriter", 0, 24)); // NOI18N
+        lblArchivo1.setFont(new java.awt.Font("Lucida Console", 0, 24)); // NOI18N
         lblArchivo1.setForeground(new java.awt.Color(255, 255, 255));
         lblArchivo1.setText("Archivo 1");
-        getContentPane().add(lblArchivo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, -1, -1));
+        getContentPane().add(lblArchivo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
 
         lblArchivo2.setFont(new java.awt.Font("Lucida Console", 0, 24)); // NOI18N
         lblArchivo2.setForeground(new java.awt.Color(255, 255, 255));
         lblArchivo2.setText("Archivo 2");
-        getContentPane().add(lblArchivo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 460, 130, 40));
+        getContentPane().add(lblArchivo2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 10, 130, 40));
+
+        jLabel1.setFont(new java.awt.Font("MS Reference Sans Serif", 0, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Area De Juego");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1480, 10, 270, 50));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1390, 70, 460, 650));
+
+        jLabel2.setFont(new java.awt.Font("MS Reference Sans Serif", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Siguiente Pieza");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1230, 70, -1, -1));
+
+        jButton1.setText("Rotar");
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1290, 270, 90, -1));
+
+        jButton2.setText("Dejar Caer");
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1290, 320, -1, -1));
+
+        jLabel3.setFont(new java.awt.Font("Lucida Console", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Tokens Analizados");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 460, -1, -1));
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable1);
+
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 480, 510, 100));
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane4.setViewportView(jTable2);
+
+        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 700, 510, 100));
+
+        jLabel4.setFont(new java.awt.Font("Lucida Console", 0, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Errores Lexicos");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 680, -1, -1));
 
         fondo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         fondo.setForeground(new java.awt.Color(255, 255, 255));
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/fondo3.jpg"))); // NOI18N
+        fondo.setToolTipText("");
         getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1920, 920));
 
         jMenu1.setText("Archivo");
@@ -266,6 +335,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem abrirArchivoDos;
     private javax.swing.JMenuItem abrirArchivoUno;
     private javax.swing.JLabel fondo;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -279,8 +354,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
     private javax.swing.JLabel lblArchivo1;
     private javax.swing.JLabel lblArchivo2;
     private javax.swing.JTextArea txtArchivo1;
