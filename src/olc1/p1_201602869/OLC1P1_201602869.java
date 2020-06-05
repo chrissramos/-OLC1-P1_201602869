@@ -18,6 +18,7 @@ public class OLC1P1_201602869 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
         VentanaPrincipal p = new VentanaPrincipal();
         p.setVisible(true);
     }

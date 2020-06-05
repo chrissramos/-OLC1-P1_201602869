@@ -9,10 +9,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,12 +25,278 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form VentanaPrincipal
      */
+    ArrayList<String> listaErrores;
+    ArrayList<String> listaTokens;
+    ArrayList<String> listaLexemas;
+    int indice; 
+    int estado;
+    String lexema;
+    DefaultTableModel modelo;
+   
+    
+    private void inicializar(){
+        indice =0;
+        estado = 0;
+        lexema = "";
+        
+        listaErrores = new ArrayList();
+        listaTokens = new ArrayList();
+        listaLexemas = new ArrayList();
+        
+        modelo=(DefaultTableModel) tblTokens.getModel(); 
+    }
+    
     public VentanaPrincipal() {
         initComponents();
+        inicializar();
         this.setLocationRelativeTo(null);
         
     }
-
+    private void analizarDos(){
+    
+        String entrada = txtArchivo2.getText() + ' ';
+        String textoLimpio = "";
+        int contadorLinea = 0;
+        for (int i = 0; i < entrada.length(); i++) {
+            char letra = entrada.charAt(i);
+            switch (letra) {
+                case '\r':
+                case '\t':
+                case '\b':
+                case '\f':
+                                   
+                    break;
+                default:
+                    textoLimpio = textoLimpio + letra;
+            }
+        }
+        
+        for (indice = 0; indice <textoLimpio.length(); indice++) {
+            char letra = textoLimpio.charAt(indice);
+            int codigoAscii = letra;
+            
+            switch (estado) {
+                case 0:
+                    if (letra == '/') {
+                        estado = 1;
+                        lexema = "" + letra;
+                    }
+                    else if (letra == '<'){
+                        //aqui ver lexema anterior, si era coma entonces fijo es direccion, si no entonces es comentario
+                        estado = 2;
+                        lexema = "" + letra;
+                    }
+                    else if (letra == ',' || letra == '>' || letra == 'v' || codigoAscii == 94
+                            || codigoAscii == 73 || codigoAscii == 74|| codigoAscii == 76|| codigoAscii == 79
+                            || codigoAscii == 83|| codigoAscii == 90|| codigoAscii == 84){
+                         estado =3;
+                         lexema = "" +letra;
+                         System.out.println("lexema que se manda en case 0 " + lexema);
+                    }
+                    else if (letra == ' '){ // espacio
+                        estado = 0;
+                    }
+                    else if (letra == '\n'){
+                        contadorLinea++;
+                        estado = 0;
+                    }
+                    else{
+                        //aqui es error lexico
+                        System.out.println("error lexico " + codigoAscii);
+                        estado = 0;
+                        listaErrores.add("" + lexema);
+                    }
+                    break;
+                case 1:
+                    if (letra == '/') {
+                        estado = 6;
+                        lexema = lexema + letra;
+                    }
+                    break;
+                case 2:
+                    // ver aqui si es signo o comentario
+                    //System.out.println("estoy en case 2 de la < ");
+                    ///System.out.println(" la letra es: " + letra );
+                    //System.out.println(" el lexema es: " + lexema);
+                    if (letra == '!') {
+                        //es comentario
+                        //System.out.println("soy un comentario");
+                        estado = 4;
+                        lexema = lexema + letra;
+                    }
+                    else if(codigoAscii == 10) {
+                        
+                        //System.out.println("soy una direccion porque mi letra es " + letra);
+                        //System.out.println("y mi lexema : " + lexema);
+                        estado = 3;
+                        lexema = "" + lexema;
+                    }
+                    
+                    break;
+                case 3: 
+                    // estado de aceptacion
+                    System.out.println("letra que vino : " + letra);
+                    System.out.println("lexema completo " + lexema);
+                    Object [] fila=new Object[3];
+                    switch (lexema) {
+                        case ">":
+                            { 
+                                fila[0] = "Direccion Derecha";
+                                
+                                break;                        
+                            }
+                        case "<":
+                            { 
+                                fila[0] = "Direccion Izquierda";
+                                
+                                break;                        
+                            }
+                        case "^":
+                            { 
+                                fila[0] = "Direccion Arriba";
+                                
+                                break;                        
+                            }
+                        case "v":
+                            { 
+                                fila[0] = "Direccion Abajo";
+                                
+                                break;                        
+                            }
+                        case ",":
+                            {
+                                fila[0] = "Coma";
+                                break;
+                            }
+                        case "L":
+                            {
+                                
+                                fila[0] = "Pieza";
+                            }
+                        case "I":
+                            {
+                                
+                                fila[0] = "Pieza";
+                            }
+                        case "J":
+                            {
+                                
+                                fila[0] = "Pieza";
+                            }
+                        case "O":
+                            {
+                                
+                                fila[0] = "Pieza";
+                            }
+                        case "S":
+                            {
+                                
+                                fila[0] = "Pieza";
+                            }
+                        case "Z":
+                            {
+                                
+                                fila[0] = "Pieza";
+                            }
+                        case "T":
+                            {
+                                
+                                fila[0] = "Pieza";
+                            }
+                        
+                        default:
+                            listaLexemas.add(lexema);
+                            break;
+                    }
+                    
+                    fila[1] = lexema;
+                    fila[2] = "archivo dos";
+                    modelo.addRow(fila);
+                    tblTokens.setModel(modelo);
+                    lexema = lexema.replaceFirst("\n", "");
+                    listaLexemas.add(lexema);
+                    
+                    
+                    
+                    
+                    lexema = "";
+                    estado = 0;
+                    indice --;
+                    
+                    break;
+                case 4:
+                    if(letra == '!'){
+                        estado = 5;
+                        lexema =  lexema +letra;
+                    }else{
+                        estado = 4;
+                        lexema = lexema + letra;
+                    }
+                    break;
+                case 5:
+                    if(letra == '>'){
+                        estado = 7;
+                        lexema = lexema +letra;
+                    }
+                    break;
+                case 6:
+                    if(letra == '\n'){
+                        // acepta
+                       // System.out.println("aceptare el lexema " + lexema);
+                        //meter a tabla
+                        Object [] fila2=new Object[3]; 
+                        
+                        fila2[0] = "Comentario simple";
+                        fila2[1] = lexema;
+                        fila2[2] = "archivo dos";
+                        //fila[3] = contadorLinea;
+                        modelo.addRow(fila2);
+                        tblTokens.setModel(modelo);
+                        
+                        listaLexemas.add(lexema);
+                        lexema = "";
+                        estado = 0;
+                        indice--;
+                    }
+                    else{
+                        estado = 6;
+                        //System.out.println("letra que vino en comentario " + letra);
+                        lexema = lexema +letra;
+                    }
+                    break;
+                case 7:
+                        Object [] fila3=new Object[3]; 
+                        
+                        fila3[0] = "Comentario Multilinea";
+                        fila3[1] = lexema;
+                        fila3[2] = "archivo dos";
+                        //fila[3] = contadorLinea;
+                        modelo.addRow(fila3);
+                        tblTokens.setModel(modelo);
+                        
+                        
+                        listaLexemas.add(lexema);
+                        lexema = "";
+                        estado = 0;
+                        indice--;
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+        }
+        
+    }
+    
+    
+    
+    public void imprimirDos(){
+        System.out.println("---------------------------------------------------");
+        System.out.println("hay " + listaLexemas.size());
+        for (int i = 0; i < listaLexemas.size(); i++) {
+            System.out.println(listaLexemas.get(i));
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -51,10 +319,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblTokens = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
         fondo = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -82,7 +351,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         txtArchivo1.setRows(5);
         jScrollPane1.setViewportView(txtArchivo1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 230, 350));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 230, 360));
 
         txtArchivo2.setBackground(new java.awt.Color(29, 41, 81));
         txtArchivo2.setColumns(20);
@@ -125,18 +394,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel3.setText("Tokens Analizados");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 460, -1, -1));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblTokens.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Token", "Lexema", "Archivo"
             }
         ));
-        jScrollPane3.setViewportView(jTable1);
+        jScrollPane3.setViewportView(tblTokens);
 
         getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 480, 510, 100));
 
@@ -159,6 +425,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Errores Lexicos");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 680, -1, -1));
+
+        jButton3.setText("Lex2");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 50, -1, -1));
 
         fondo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         fondo.setForeground(new java.awt.Color(255, 255, 255));
@@ -195,6 +469,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenu2.add(jMenuItem4);
 
         jMenuItem5.setText("Analizar Archivo 2");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem5);
 
         jMenuItem6.setText("Jugar");
@@ -295,6 +574,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
               }
             txtArchivo2.setText(texto);
     }//GEN-LAST:event_abrirArchivoDosActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        analizarDos();
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        imprimirDos();
+    }//GEN-LAST:event_jButton3ActionPerformed
     
     /**
      * @param args the command line arguments
@@ -337,6 +626,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel fondo;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -359,10 +649,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JLabel lblArchivo1;
     private javax.swing.JLabel lblArchivo2;
+    private javax.swing.JTable tblTokens;
     private javax.swing.JTextArea txtArchivo1;
     private javax.swing.JTextArea txtArchivo2;
     // End of variables declaration//GEN-END:variables
