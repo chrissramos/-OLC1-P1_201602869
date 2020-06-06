@@ -52,6 +52,202 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         
     }
+    
+    private void analizarUno(){
+    
+        String entrada = txtArchivo1.getText() + ' ';
+        String textoLimpio = "";
+        for (int i = 0; i < entrada.length(); i++) {
+            char letra = entrada.charAt(i);
+            switch (letra) {
+                case '\r':
+                case '\t':
+                case '\b':
+                case '\f':
+                                   
+                    break;
+                default:
+                    textoLimpio = textoLimpio + letra;
+            }
+        }
+        
+        for (indice = 0; indice <textoLimpio.length(); indice++) {
+            char letra = textoLimpio.charAt(indice);
+            int codigoAscii = letra;
+            switch (estado) {
+                case 0:
+                    if((codigoAscii >= 65 && codigoAscii <= 90 )
+                            || (codigoAscii >= 97 && codigoAscii <= 122)){
+                        System.out.println("es letra se va al 1" + letra);
+                        estado = 1;
+                        lexema = ""+letra;
+                    
+                    }
+                    else if(codigoAscii >= 48 && codigoAscii <= 57){
+                        estado = 2;
+                        lexema = ""+letra;
+                    }
+                    else if(codigoAscii == 42 || codigoAscii == 35 || codigoAscii == 45 ){
+                        estado = 3;
+                        lexema = ""+letra;
+                    }
+                    else if(letra == '/'){
+                        estado = 4;
+                        lexema = ""+letra;
+                    }
+                    else if(letra == '<'){
+                        estado = 6;
+                        lexema = ""+letra;
+                    }
+                    else if (letra == ' '){ // espacio
+                        estado = 0;
+                    }
+                    else if (letra == '\n'){
+                        estado = 0;
+                    }
+                    break;
+                case 1:
+                    if( (codigoAscii >= 65 && codigoAscii <= 90) 
+                            || (codigoAscii >= 97 && codigoAscii <= 122)
+                            || ( codigoAscii >= 48 && codigoAscii <= 57)
+                            || letra == '_'){
+                        estado = 1;
+                        lexema = lexema+letra;
+                    }else{
+                        //aqui acepto identificadores
+                        Object[] fila = new Object[3];
+                        fila[0] = "Identificador";
+                        fila[1] = lexema;
+                        fila[2] = "archivo uno";
+                        modelo.addRow(fila);
+                        tblTokens.setModel(modelo);
+                        
+                        System.out.println("identificador a aceptar: " + lexema);
+                        lexema = "";
+                        estado = 0;
+                        indice--;
+                    }
+                    break;
+                case 2:
+                    if(codigoAscii >= 48 && codigoAscii <= 57){
+                        estado = 2;
+                        lexema = lexema + letra;
+                    }else{
+                        Object[] fila = new Object[3];
+                        fila[0] = "Numero";
+                        fila[1] = lexema;
+                        fila[2] = "archivo uno";
+                        modelo.addRow(fila);
+                        tblTokens.setModel(modelo);
+                        
+                        lexema = "";
+                        estado = 0;
+                        indice--;
+                    }
+                    break;
+                case 3:
+                    Object[] fila2 = new Object[3];
+                    switch (lexema) {
+                        case "*":
+                            fila2[0] = "signo *";
+                            break;
+                        case "#":
+                            fila2[0] = "signo #";
+                            break;
+                        case "-":
+                            fila2[0] = "signo -";
+                            break;
+                        default:
+                            break;
+                    }
+                    
+                    fila2[1] = lexema;
+                    fila2[2] = "archivo uno";
+                    modelo.addRow(fila2);
+                    tblTokens.setModel(modelo);
+                            
+                    lexema = "";
+                    estado = 0;
+                    indice--;
+                    
+                    break;
+                case 4:
+                    if(letra == '/'){
+                        estado = 5;
+                        lexema = lexema + letra;
+                        System.out.println("se esta armando coment");
+                    }
+                    break;
+                case 5:
+                    // acepto comentario simple
+                    if(letra == '\n'){
+                        // acepta
+                        System.out.println("aceptare el lexema " + lexema);
+                        //meter a tabla
+                        Object [] fila3=new Object[3]; 
+                        
+                        fila3[0] = "Comentario simple";
+                        fila3[1] = lexema;
+                        fila3[2] = "archivo dos";
+                        //fila[3] = contadorLinea;
+                        modelo.addRow(fila3);
+                        tblTokens.setModel(modelo);
+                        
+                        //listaLexemas.add(lexema);
+                        lexema = "";
+                        estado = 0;
+                        indice--;
+                    }
+                    else{
+                        estado = 6;
+                        //System.out.println("letra que vino en comentario " + letra);
+                        lexema = lexema +letra;
+                    }
+                    break;
+                case 6:
+                    if(letra == '!'){
+                        estado = 7;
+                        lexema = lexema + letra;
+                    }
+                    break;
+                case 7:
+                    if(letra == '!'){
+                        estado = 8;
+                        lexema =  lexema +letra;
+                    }else{
+                        estado = 7;
+                        lexema = lexema + letra;
+                    }
+                    break;
+                case 8:
+                    if(letra == '>'){
+                        estado = 9;
+                        lexema = lexema+letra;
+                    }
+                    break;
+                case 9:// acepto comentario multi
+                    Object [] fila4=new Object[3]; 
+                        
+                    fila4[0] = "Comentario Multilinea";
+                    fila4[1] = lexema;
+                    fila4[2] = "archivo dos";
+                    //fila[3] = contadorLinea;
+                    modelo.addRow(fila4);
+                    tblTokens.setModel(modelo);
+
+
+                    listaLexemas.add(lexema);
+                    lexema = "";
+                    estado = 0;
+                    indice--;
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+        }
+    }
+    
+    
     private void analizarDos(){
     
         String entrada = txtArchivo2.getText() + ' ';
@@ -205,7 +401,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                             }
                         
                         default:
-                            listaLexemas.add(lexema);
+                            //listaLexemas.add(lexema);
+                            // reportar error lexico si no viene letra
+                            
                             break;
                     }
                     
@@ -466,6 +664,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenu2.setText("Juego");
 
         jMenuItem4.setText("Analizar Archivo 1");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem4);
 
         jMenuItem5.setText("Analizar Archivo 2");
@@ -584,6 +787,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         imprimirDos();
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        analizarUno();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
     
     /**
      * @param args the command line arguments

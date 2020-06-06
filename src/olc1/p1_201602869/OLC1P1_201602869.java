@@ -16,8 +16,13 @@ public class OLC1P1_201602869 {
     /**
      * @param args the command line arguments
      */
+    public static int x;
+
+    
+    
     public static void main(String[] args) {
         // TODO code application logic here
+        
         
         VentanaPrincipal p = new VentanaPrincipal();
         p.setVisible(true);
