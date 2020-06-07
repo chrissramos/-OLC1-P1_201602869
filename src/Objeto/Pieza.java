@@ -21,6 +21,8 @@ public class Pieza {
         this.direccion = direccion;
     }
 
+    
+
     public String getNombre() {
         return nombre;
     }

@@ -5,11 +5,13 @@
  */
 package grafico;
 
+import Objeto.Pieza;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -28,27 +30,63 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     ArrayList<String> listaErrores;
     ArrayList<String> listaTokens;
     ArrayList<String> listaLexemas;
+    ArrayList<Pieza> listaPiezas;
     int indice; 
     int estado;
     String lexema;
+    String nombreLetra;
+    
+    
+    //variables para archivo de entrada1
+    int dimX;
+    int dimY;
+    String nombreNivel;
+    int contadorNivel;// contador de niveles
+    int cantidadNiveles;//cantidad de niveles archivo1
+    // fin variables archivo entrada1
     DefaultTableModel modelo;
-   
+    DefaultTableModel modeloPieza;
+    DefaultTableModel modeloNivel;
+    
+    //para matriz
+    int dimensionX = 0;
+    int dimensionY = 0;
+    int tamX = 0;
+    int tamY = 0;
+    static final int tableroX = 500;
+    static final int tableroY = 500;
+    
+    JButton[][] matrizPrincipal;
+    
     
     private void inicializar(){
         indice =0;
         estado = 0;
         lexema = "";
         
+        nombreLetra = "";
+        nombreNivel ="";
+        dimX = 0;
+        dimY = 0;
+        
+        contadorNivel = 1;
+        cantidadNiveles = 0;
         listaErrores = new ArrayList();
         listaTokens = new ArrayList();
         listaLexemas = new ArrayList();
         
+        listaPiezas = new ArrayList();
+        
         modelo=(DefaultTableModel) tblTokens.getModel(); 
+        modeloPieza =(DefaultTableModel) tblPiezas.getModel();
+        modeloNivel = (DefaultTableModel) tblNiveles.getModel();
+        
     }
     
     public VentanaPrincipal() {
         initComponents();
         inicializar();
+        
         this.setLocationRelativeTo(null);
         
     }
@@ -78,14 +116,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 case 0:
                     if((codigoAscii >= 65 && codigoAscii <= 90 )
                             || (codigoAscii >= 97 && codigoAscii <= 122)){
-                        System.out.println("es letra se va al 1" + letra);
+                        //System.out.println("es letra se va al 1" + letra);
                         estado = 1;
                         lexema = ""+letra;
-                    
+                        
                     }
                     else if(codigoAscii >= 48 && codigoAscii <= 57){
                         estado = 2;
                         lexema = ""+letra;
+                        
                     }
                     else if(codigoAscii == 42 || codigoAscii == 35 || codigoAscii == 45 ){
                         estado = 3;
@@ -123,6 +162,20 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         tblTokens.setModel(modelo);
                         
                         System.out.println("identificador a aceptar: " + lexema);
+                        
+                        // aceptar y meter a tabla de llenado de nivel
+                        Object[] niv = new Object[4];
+                        niv[0]= contadorNivel++;
+                        niv[1]=lexema;
+                        niv[2]= dimX;
+                        niv[3] = dimY;
+                        
+                        modeloNivel.addRow(niv);
+                        tblNiveles.setModel(modeloNivel);
+                        
+                        dimX = 0;
+                        dimY = 0;
+                        
                         lexema = "";
                         estado = 0;
                         indice--;
@@ -140,6 +193,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         modelo.addRow(fila);
                         tblTokens.setModel(modelo);
                         
+                        // ver variables
+                        if(cantidadNiveles == 0){
+                            cantidadNiveles = Integer.parseInt(lexema);
+                        }
+                        else if(dimY == 0){
+                            dimY = Integer.parseInt(lexema);
+                        }
+                        else if(dimX == 0)
+                            dimX = Integer.parseInt(lexema);
                         lexema = "";
                         estado = 0;
                         indice--;
@@ -334,28 +396,61 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     System.out.println("letra que vino : " + letra);
                     System.out.println("lexema completo " + lexema);
                     Object [] fila=new Object[3];
+                    Object [] filaP = new Object[2];
+                    Pieza p = new Pieza();
                     switch (lexema) {
                         case ">":
                             { 
                                 fila[0] = "Direccion Derecha";
+                                p.setNombre(nombreLetra);
+                                p.setDireccion("derecha");
+                                listaPiezas.add(p);
                                 
+                                filaP[0] = nombreLetra;
+                                filaP[1] = ">";
+                                modeloPieza.addRow(filaP);
+                                tblPiezas.setModel(modeloPieza);
                                 break;                        
                             }
                         case "<":
                             { 
                                 fila[0] = "Direccion Izquierda";
+                                p.setNombre(nombreLetra);
+                                p.setDireccion("izquierda");
+                                listaPiezas.add(p);
+                                
+                                filaP[0] = nombreLetra;
+                                filaP[1] = "<";
+                                modeloPieza.addRow(filaP);
+                                tblPiezas.setModel(modeloPieza);
                                 
                                 break;                        
                             }
                         case "^":
                             { 
                                 fila[0] = "Direccion Arriba";
+                                p.setNombre(nombreLetra);
+                                p.setDireccion("arriba");
+                                listaPiezas.add(p);
+                                
+                                filaP[0] = nombreLetra;
+                                filaP[1] = "^";
+                                modeloPieza.addRow(filaP);
+                                tblPiezas.setModel(modeloPieza);
                                 
                                 break;                        
                             }
                         case "v":
                             { 
                                 fila[0] = "Direccion Abajo";
+                                p.setNombre(nombreLetra);
+                                p.setDireccion("abajo");
+                                listaPiezas.add(p);
+                                
+                                filaP[0] = nombreLetra;
+                                filaP[1] = "v";
+                                modeloPieza.addRow(filaP);
+                                tblPiezas.setModel(modeloPieza);
                                 
                                 break;                        
                             }
@@ -367,36 +462,38 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         case "L":
                             {
                                 
+                                nombreLetra = lexema;
                                 fila[0] = "Pieza";
                             }
                         case "I":
                             {
-                                
+                                nombreLetra = lexema;
                                 fila[0] = "Pieza";
                             }
                         case "J":
                             {
-                                
+                                nombreLetra = lexema;
                                 fila[0] = "Pieza";
                             }
                         case "O":
                             {
-                                
+                                nombreLetra = lexema;
                                 fila[0] = "Pieza";
                             }
                         case "S":
                             {
-                                
+                                nombreLetra = lexema;
                                 fila[0] = "Pieza";
                             }
                         case "Z":
                             {
-                                
+                                nombreLetra = lexema;
                                 fila[0] = "Pieza";
                             }
                         case "T":
                             {
                                 
+                                nombreLetra = lexema;
                                 fila[0] = "Pieza";
                             }
                         
@@ -511,7 +608,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         lblArchivo1 = new javax.swing.JLabel();
         lblArchivo2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        pnlJuego = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -522,6 +619,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jTable2 = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tblPiezas = new javax.swing.JTable();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tblNiveles = new javax.swing.JTable();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -574,12 +677,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Area De Juego");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1480, 10, 270, 50));
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1390, 70, 460, 650));
+
+        pnlJuego.setLayout(new java.awt.GridLayout());
+        getContentPane().add(pnlJuego, new org.netbeans.lib.awtextra.AbsoluteConstraints(1390, 160, 510, 510));
 
         jLabel2.setFont(new java.awt.Font("MS Reference Sans Serif", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Siguiente Pieza");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1230, 70, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1230, 100, -1, -1));
 
         jButton1.setText("Rotar");
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1290, 270, 90, -1));
@@ -631,6 +736,40 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 50, -1, -1));
+
+        tblPiezas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Pieza", "Direccion"
+            }
+        ));
+        jScrollPane5.setViewportView(tblPiezas);
+
+        getContentPane().add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 100, 130, 170));
+
+        tblNiveles.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nivel", "Nombre", "X", "Y"
+            }
+        ));
+        jScrollPane6.setViewportView(tblNiveles);
+
+        getContentPane().add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 100, 240, 130));
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Lista Niveles");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 70, -1, -1));
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Lista Piezas");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 70, -1, -1));
 
         fondo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         fondo.setForeground(new java.awt.Color(255, 255, 255));
@@ -839,6 +978,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -852,14 +993,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTable jTable2;
     private javax.swing.JLabel lblArchivo1;
     private javax.swing.JLabel lblArchivo2;
+    private javax.swing.JPanel pnlJuego;
+    private javax.swing.JTable tblNiveles;
+    private javax.swing.JTable tblPiezas;
     private javax.swing.JTable tblTokens;
     private javax.swing.JTextArea txtArchivo1;
     private javax.swing.JTextArea txtArchivo2;
