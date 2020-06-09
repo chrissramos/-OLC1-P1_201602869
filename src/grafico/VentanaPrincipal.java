@@ -6,13 +6,17 @@
 package grafico;
 
 import Objeto.Pieza;
+import java.awt.Color;
+import java.awt.GridLayout;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileFilter;
@@ -37,18 +41,25 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     String nombreLetra;
     
     
+    String tablero; // aqui guardar tablero
+    
+    int nivelActual;
+    
+    
     //variables para archivo de entrada1
     int dimX;
     int dimY;
     String nombreNivel;
     int contadorNivel;// contador de niveles
     int cantidadNiveles;//cantidad de niveles archivo1
+    int contadorPosicionM;
     // fin variables archivo entrada1
     DefaultTableModel modelo;
     DefaultTableModel modeloPieza;
     DefaultTableModel modeloNivel;
     
     //para matriz
+    
     int dimensionX = 0;
     int dimensionY = 0;
     int tamX = 0;
@@ -63,14 +74,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         indice =0;
         estado = 0;
         lexema = "";
-        
+        nivelActual = 1;
         nombreLetra = "";
         nombreNivel ="";
         dimX = 0;
         dimY = 0;
-        
+        tablero = "";
         contadorNivel = 1;
         cantidadNiveles = 0;
+        contadorPosicionM = 0;
         listaErrores = new ArrayList();
         listaTokens = new ArrayList();
         listaLexemas = new ArrayList();
@@ -126,7 +138,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         lexema = ""+letra;
                         
                     }
-                    else if(codigoAscii == 42 || codigoAscii == 35 || codigoAscii == 45 ){
+                    else if(letra == '*' || letra == '#' || letra == '-' ){
                         estado = 3;
                         lexema = ""+letra;
                     }
@@ -142,6 +154,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         estado = 0;
                     }
                     else if (letra == '\n'){
+                        /*if(!"".equals(tablero)){
+                            System.out.println("tablero");
+                            System.out.println(tablero);
+                        }*/
                         estado = 0;
                     }
                     break;
@@ -161,7 +177,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         modelo.addRow(fila);
                         tblTokens.setModel(modelo);
                         
-                        System.out.println("identificador a aceptar: " + lexema);
+                        //System.out.println("identificador a aceptar: " + lexema);
                         
                         // aceptar y meter a tabla de llenado de nivel
                         Object[] niv = new Object[4];
@@ -170,11 +186,27 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         niv[2]= dimX;
                         niv[3] = dimY;
                         
+                        // imprimir tablero
+                        if(!"".equals(tablero)){
+                            //System.out.println("Tablero de nivel: " + contadorNivel);
+                            //System.out.println("Nuevo tablero");
+                            //System.out.println(tablero);
+                        }
+                        
+                        
                         modeloNivel.addRow(niv);
                         tblNiveles.setModel(modeloNivel);
                         
+                        System.out.println("Viene un nivel " + lexema + " X:"+ dimX + " Y:" + dimY);
+                        
+                        
                         dimX = 0;
                         dimY = 0;
+                        
+                        
+                        // vaciar variable tablero
+                        //tablero = "";
+                        
                         
                         lexema = "";
                         estado = 0;
@@ -193,6 +225,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         modelo.addRow(fila);
                         tblTokens.setModel(modelo);
                         
+                        
+                        
                         // ver variables
                         if(cantidadNiveles == 0){
                             cantidadNiveles = Integer.parseInt(lexema);
@@ -200,20 +234,31 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         else if(dimY == 0){
                             dimY = Integer.parseInt(lexema);
                         }
-                        else if(dimX == 0)
+                        else if(dimX == 0){
                             dimX = Integer.parseInt(lexema);
+                        }
+                        
                         lexema = "";
                         estado = 0;
                         indice--;
                     }
                     break;
                 case 3:
+                    /*if(!"*".equals(lexema) || !"#".equals(lexema) || !"-".equals(lexema)){
+                        System.out.println("* no es igual a = " + lexema);
+                        //System.out.println("caracter desconocido en matriz " + lexema);
+                        //System.out.println(" y su letra " + letra);
+                    }*/
                     Object[] fila2 = new Object[3];
+                           
+                    
                     switch (lexema) {
                         case "*":
+                            tablero += lexema;
                             fila2[0] = "signo *";
                             break;
                         case "#":
+                            tablero += lexema;
                             fila2[0] = "signo #";
                             break;
                         case "-":
@@ -625,6 +670,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         tblNiveles = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
         fondo = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -770,6 +816,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Lista Piezas");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 70, -1, -1));
+
+        jButton4.setText("Matrix");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 10, -1, -1));
 
         fondo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         fondo.setForeground(new java.awt.Color(255, 255, 255));
@@ -931,6 +985,39 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         analizarUno();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        jugar();
+    }//GEN-LAST:event_jButton4ActionPerformed
+    
+    public void jugar(){
+        DefaultTableModel tm = (DefaultTableModel) tblNiveles.getModel();
+        
+        int datoX = Integer.parseInt(String.valueOf(tm.getValueAt(nivelActual-1 ,2)));
+        int datoY = Integer.parseInt(String.valueOf(tm.getValueAt(nivelActual-1 ,3)));
+        
+        //int datoX = 12;
+        //int datoY = 12;
+        
+        
+        JOptionPane.showMessageDialog(null, "Dimensiones nivel 1: " + datoX + "," + datoY);
+        pnlJuego.setLayout(new GridLayout(datoY, datoX));
+        pnlJuego.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+        
+        
+        for (int i =0; i<(datoX*datoY); i++){
+            final JLabel label = new JLabel("#");
+            label.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+            pnlJuego.add(label);
+     }
+        
+        
+        //JButton btnTest = new JButton();
+        //btnTest.setText("0");
+        //pnlJuego.add(btnTest);
+        
+    }
     
     /**
      * @param args the command line arguments
@@ -974,6 +1061,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
