@@ -35,6 +35,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     ArrayList<String> listaTokens;
     ArrayList<String> listaLexemas;
     ArrayList<Pieza> listaPiezas;
+    ArrayList<String> listaTableros;
     int indice; 
     int estado;
     String lexema;
@@ -86,6 +87,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         listaErrores = new ArrayList();
         listaTokens = new ArrayList();
         listaLexemas = new ArrayList();
+        listaTableros = new ArrayList();
         
         listaPiezas = new ArrayList();
         
@@ -186,12 +188,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         niv[2]= dimX;
                         niv[3] = dimY;
                         
-                        // imprimir tablero
+                        // guardar Tablero
                         if(!"".equals(tablero)){
-                            //System.out.println("Tablero de nivel: " + contadorNivel);
-                            //System.out.println("Nuevo tablero");
-                            //System.out.println(tablero);
+                            listaTableros.add(tablero);
+                            tablero = "";
                         }
+                        
+                        
+                        //limpiarTablero 
                         
                         
                         modeloNivel.addRow(niv);
@@ -636,7 +640,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             System.out.println(listaLexemas.get(i));
         }
     }
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -671,6 +674,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
+        pnlPieza = new javax.swing.JPanel();
         fondo = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -824,6 +828,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 10, -1, -1));
+        getContentPane().add(pnlPieza, new org.netbeans.lib.awtextra.AbsoluteConstraints(1390, 70, 510, 80));
 
         fondo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         fondo.setForeground(new java.awt.Color(255, 255, 255));
@@ -988,7 +993,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        listaTableros.add(tablero);
         jugar();
+        System.out.println("cantidad tableros " + listaTableros.size());
+        
+        //System.out.println("Ultimo tablero: ");
+        //System.out.println(tablero);
+        
+        
     }//GEN-LAST:event_jButton4ActionPerformed
     
     public void jugar(){
@@ -1001,16 +1013,70 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         //int datoY = 12;
         
         
-        JOptionPane.showMessageDialog(null, "Dimensiones nivel 1: " + datoX + "," + datoY);
+        JOptionPane.showMessageDialog(null, "Dimensiones nivel: " + datoX + "," + datoY);
         pnlJuego.setLayout(new GridLayout(datoY, datoX));
         pnlJuego.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
         
         
-        for (int i =0; i<(datoX*datoY); i++){
-            final JLabel label = new JLabel("#");
-            label.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-            pnlJuego.add(label);
-     }
+//        for (int i =0; i<(datoX*datoY); i++){
+//            final JLabel label = new JLabel("#");
+//            label.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+//            pnlJuego.add(label);
+//        }
+        JLabel [][] arregloTab = new JLabel[datoY][datoX];
+        
+        for (int i = 0; i < datoY; i++) {
+            for (int j = 0; j < datoX; j++) {
+                arregloTab[i][j] = new JLabel("#");
+                //pnlJuego.add(arregloTab[i][j]);
+            }
+            
+        }
+        //obtener el tablero del nivel que es 
+        
+        String tabActual = listaTableros.get(nivelActual-1);
+        
+        System.out.println("Tablero Actual");
+        System.out.println(tabActual);
+        
+        
+        int contador=0;
+        int tamanioTab = tabActual.length();
+        //JOptionPane.showMessageDialog(null, "tamanio string " + tamanioTab);
+        
+        for (int i = 0; i < tabActual.length(); i++) {
+            char caract = tabActual.charAt(i);
+            if(caract == '*'){
+                contador = 0;
+                //System.out.println("encontre * en posicion: " + i);
+                for (int j = 0; j < datoY; j++) {
+                    for (int k = 0; k < datoX; k++) {
+                        contador++;
+                        if(contador == i){
+                            //System.out.println("contador = " + contador +" = " + i + " en: " + j + "," + k );
+                            int coord = k +1;
+                            //System.out.println("posiciones: " + j + "," + coord);
+                            JLabel lbl = new JLabel("*");
+                            lbl.setBorder(BorderFactory.createLineBorder(Color.RED));
+                            lbl.setBackground(Color.RED);
+                            lbl.setOpaque(true);
+                            arregloTab[j][coord] = lbl;
+                            //pnlJuego.add(arregloTab[j][k]);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // pintar tablero
+        
+        
+        for (int i = 0; i < datoY; i++) {
+            for (int j = 0; j < datoX; j++) {
+                pnlJuego.add(arregloTab[i][j]);
+            }
+            
+        }
         
         
         //JButton btnTest = new JButton();
@@ -1091,6 +1157,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel lblArchivo1;
     private javax.swing.JLabel lblArchivo2;
     private javax.swing.JPanel pnlJuego;
+    private javax.swing.JPanel pnlPieza;
     private javax.swing.JTable tblNiveles;
     private javax.swing.JTable tblPiezas;
     private javax.swing.JTable tblTokens;
