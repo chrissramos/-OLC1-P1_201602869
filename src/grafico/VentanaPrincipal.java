@@ -220,16 +220,132 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         
         
         
+        ////////////// letra L 
+        
+        // L arriba   y,x 
+        matrizLarriba[1][0] = lbl1;
+        matrizLarriba[2][0] = lbl2;
+        matrizLarriba[3][0] = lbl3;
+        matrizLarriba[3][1] = lbl4;
+        // L abajo
+        matrizLabajo[0][0] = lbl1;
+        matrizLabajo[0][1] = lbl2;
+        matrizLabajo[1][1] = lbl3;
+        matrizLabajo[2][1] = lbl4;
+        // L derecha
+        matrizLderecha[0][0] = lbl1;
+        matrizLderecha[0][1] = lbl2;
+        matrizLderecha[0][2] = lbl3;
+        matrizLderecha[1][0] = lbl4;
+        // L izq
+        matrizLizquierda[1][0] = lbl1;
+        matrizLizquierda[1][1] = lbl2;
+        matrizLizquierda[1][2] = lbl3;
+        matrizLizquierda[0][2] = lbl4;
         
         
         
+        ////////////// letra O
+        
+        // O arriba  y,x 
+        matrizOarriba[2][0] = lbl1;
+        matrizOarriba[2][1] = lbl2;
+        matrizOarriba[3][0] = lbl3;
+        matrizOarriba[3][1] = lbl4;
+        // O abajo
+        matrizOabajo[2][0] = lbl1;
+        matrizOabajo[2][1] = lbl2;
+        matrizOabajo[3][0] = lbl3;
+        matrizOabajo[3][1] = lbl4;
+        // O derecha
+        matrizOderecha[2][0] = lbl1;
+        matrizOderecha[2][1] = lbl2;
+        matrizOderecha[3][0] = lbl3;
+        matrizOderecha[3][1] = lbl4;
+        // O izq
+        matrizOizquierda[2][0] = lbl1;
+        matrizOizquierda[2][1] = lbl2;
+        matrizOizquierda[3][0] = lbl3;
+        matrizOizquierda[3][1] = lbl4;
+        
+        
+        
+        ////////////// letra S
+        
+        // S arriba  y,x 
+        matrizSarriba[3][0] = lbl1;
+        matrizSarriba[3][1] = lbl2;
+        matrizSarriba[2][1] = lbl3;
+        matrizSarriba[2][2] = lbl4;
+        // S abajo
+        matrizSabajo[1][0] = lbl1;
+        matrizSabajo[1][1] = lbl2;
+        matrizSabajo[0][1] = lbl3;
+        matrizSabajo[0][2] = lbl4;
+        // S derecha
+        matrizSderecha[0][0] = lbl1;
+        matrizSderecha[1][0] = lbl2;
+        matrizSderecha[1][1] = lbl3;
+        matrizSderecha[2][1] = lbl4;
+        // S izq
+        matrizSizquierda[0][0] = lbl1;
+        matrizSizquierda[1][0] = lbl2;
+        matrizSizquierda[1][1] = lbl3;
+        matrizSizquierda[2][1] = lbl4;
+        
+        
+        ////////////// letra Z
+        
+        // Z arriba  y,x 
+        matrizZarriba[2][0] = lbl1;
+        matrizZarriba[2][1] = lbl2;
+        matrizZarriba[3][1] = lbl3;
+        matrizZarriba[3][2] = lbl4;
+        // Z abajo
+        matrizZabajo[0][0] = lbl1;
+        matrizZabajo[0][1] = lbl2;
+        matrizZabajo[1][1] = lbl3;
+        matrizZabajo[1][2] = lbl4;
+        // Z derecha
+        matrizZderecha[1][1] = lbl1;
+        matrizZderecha[2][1] = lbl2;
+        matrizZderecha[2][0] = lbl3;
+        matrizZderecha[3][0] = lbl4;
+        // Z izq
+        matrizZizquierda[1][1] = lbl1;
+        matrizZizquierda[2][1] = lbl2;
+        matrizZizquierda[2][0] = lbl3;
+        matrizZizquierda[3][0] = lbl4;
+        
+        ////////////// letra T
+        
+        // T arriba  y,x 
+        matrizTarriba[1][0] = lbl1;
+        matrizTarriba[1][1] = lbl2;
+        matrizTarriba[1][2] = lbl3;
+        matrizTarriba[2][1] = lbl4;
+        // T abajo
+        matrizTabajo[2][0] = lbl1;
+        matrizTabajo[2][1] = lbl2;
+        matrizTabajo[2][2] = lbl3;
+        matrizTabajo[1][1] = lbl4;
+        //T derecha
+        matrizTderecha[1][0] = lbl1;
+        matrizTderecha[2][0] = lbl2;
+        matrizTderecha[3][0] = lbl3;
+        matrizTderecha[2][1] = lbl4;
+        // T izq
+        matrizTizquierda[1][1] = lbl1;
+        matrizTizquierda[2][1] = lbl2;
+        matrizTizquierda[3][1] = lbl3;
+        matrizTizquierda[2][0] = lbl4;
         
         
         //pintar tablero
         
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                pnlPieza.add(matrizJizquierda[i][j]);
+                pnlPieza.add(matrizLderecha[i][j]);
             }
             
         }
