@@ -68,10 +68,177 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     static final int tableroX = 500;
     static final int tableroY = 500;
     
-    JButton[][] matrizPrincipal;
     
+    //matrices de piezas
+    // figura I 
+    JLabel [][] matrizIarriba = new JLabel[4][4];
+    JLabel [][] matrizIabajo = new JLabel[4][4];
+    JLabel [][] matrizIderecha = new JLabel[4][4];
+    JLabel [][] matrizIizquierda = new JLabel[4][4];
+    
+    //figura J 
+    JLabel [][] matrizJarriba = new JLabel[4][4];
+    JLabel [][] matrizJabajo = new JLabel[4][4];
+    JLabel [][] matrizJderecha = new JLabel[4][4];
+    JLabel [][] matrizJizquierda = new JLabel[4][4];
+    
+    //figura L 
+    JLabel [][] matrizLarriba = new JLabel[4][4];
+    JLabel [][] matrizLabajo = new JLabel[4][4];
+    JLabel [][] matrizLderecha = new JLabel[4][4];
+    JLabel [][] matrizLizquierda = new JLabel[4][4];
+    
+    //figura O 
+    JLabel [][] matrizOarriba = new JLabel[4][4];
+    JLabel [][] matrizOabajo = new JLabel[4][4];
+    JLabel [][] matrizOderecha = new JLabel[4][4];
+    JLabel [][] matrizOizquierda = new JLabel[4][4];
+    
+    // figura S
+    JLabel [][] matrizSarriba = new JLabel[4][4];
+    JLabel [][] matrizSabajo = new JLabel[4][4];
+    JLabel [][] matrizSderecha = new JLabel[4][4];
+    JLabel [][] matrizSizquierda = new JLabel[4][4];
+    
+    //figura Z
+    JLabel [][] matrizZarriba = new JLabel[4][4];
+    JLabel [][] matrizZabajo = new JLabel[4][4];
+    JLabel [][] matrizZderecha = new JLabel[4][4];
+    JLabel [][] matrizZizquierda = new JLabel[4][4];
+        
+    //figura T
+    JLabel [][] matrizTarriba = new JLabel[4][4];
+    JLabel [][] matrizTabajo = new JLabel[4][4];
+    JLabel [][] matrizTderecha = new JLabel[4][4];
+    JLabel [][] matrizTizquierda = new JLabel[4][4];
+    
+    public void llenarMatricesPiezas(){
+        
+        // todas las matrices
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                // I 
+                matrizIarriba[i][j] = new JLabel(" ");
+                matrizIabajo[i][j] = new JLabel(" ");
+                matrizIderecha[i][j] = new JLabel(" ");
+                matrizIizquierda[i][j] = new JLabel(" ");
+                
+                // J
+                matrizJarriba[i][j] = new JLabel(" ");
+                matrizJabajo[i][j] = new JLabel(" ");
+                matrizJderecha[i][j] = new JLabel(" ");
+                matrizJizquierda[i][j] = new JLabel(" ");
+                // L 
+                matrizLarriba[i][j] = new JLabel(" ");
+                matrizLabajo[i][j] = new JLabel(" ");
+                matrizLderecha[i][j] = new JLabel(" ");
+                matrizLizquierda[i][j] = new JLabel(" ");
+                // O 
+                matrizOarriba[i][j] = new JLabel(" ");
+                matrizOabajo[i][j] = new JLabel(" ");
+                matrizOderecha[i][j] = new JLabel(" ");
+                matrizOizquierda[i][j] = new JLabel(" ");
+                // S 
+                matrizSarriba[i][j] = new JLabel(" ");
+                matrizSabajo[i][j] = new JLabel(" ");
+                matrizSderecha[i][j] = new JLabel(" ");
+                matrizSizquierda[i][j] = new JLabel(" ");
+                // Z 
+                matrizZarriba[i][j] = new JLabel(" ");
+                matrizZabajo[i][j] = new JLabel(" ");
+                matrizZderecha[i][j] = new JLabel(" ");
+                matrizZizquierda[i][j] = new JLabel(" ");
+                // T 
+                matrizTarriba[i][j] = new JLabel(" ");
+                matrizTabajo[i][j] = new JLabel(" ");
+                matrizTderecha[i][j] = new JLabel(" ");
+                matrizTizquierda[i][j] = new JLabel(" ");
+            }
+        }
+        
+        JLabel lbl1 = new JLabel(" ");
+        lbl1.setBorder(BorderFactory.createLineBorder(Color.RED));
+        lbl1.setBackground(Color.RED);
+        lbl1.setOpaque(true);
+        JLabel lbl2 = new JLabel(" ");
+        lbl2.setBorder(BorderFactory.createLineBorder(Color.RED));
+        lbl2.setBackground(Color.RED);
+        lbl2.setOpaque(true);
+        JLabel lbl3 = new JLabel(" ");
+        lbl3.setBorder(BorderFactory.createLineBorder(Color.RED));
+        lbl3.setBackground(Color.RED);
+        lbl3.setOpaque(true);
+        JLabel lbl4 = new JLabel(" ");
+        lbl4.setBorder(BorderFactory.createLineBorder(Color.RED));
+        lbl4.setBackground(Color.RED);
+        lbl4.setOpaque(true);
+        // I arriba
+        matrizIarriba[0][1] = lbl1;
+        matrizIarriba[1][1] = lbl2;
+        matrizIarriba[2][1] = lbl3;
+        matrizIarriba[3][1] = lbl4;
+        // I abajo
+        matrizIabajo[0][1] = lbl1;
+        matrizIabajo[1][1] = lbl2;
+        matrizIabajo[2][1] = lbl3;
+        matrizIabajo[3][1] = lbl4;
+        // I derecha
+        matrizIderecha[1][0] = lbl1;
+        matrizIderecha[1][0] = lbl2;
+        matrizIderecha[1][0] = lbl3;
+        matrizIderecha[1][0] = lbl4;
+        
+        // I izq
+        matrizIizquierda[1][0] = lbl1;
+        matrizIizquierda[1][0] = lbl2;
+        matrizIizquierda[1][0] = lbl3;
+        matrizIizquierda[1][0] = lbl4;
+        
+        ///////// letra J 
+        
+        // J arriba
+        matrizJarriba[1][1] = lbl1;
+        matrizJarriba[2][1] = lbl2;
+        matrizJarriba[3][1] = lbl3;
+        matrizJarriba[3][0] = lbl4;
+        // J abajo
+        matrizJabajo[1][0] = lbl1;
+        matrizJabajo[2][0] = lbl2;
+        matrizJabajo[3][0] = lbl3;
+        matrizJabajo[1][1] = lbl4;
+        // J derecha
+        matrizJderecha[0][0] = lbl1;
+        matrizJderecha[1][0] = lbl2;
+        matrizJderecha[1][1] = lbl3;
+        matrizJderecha[1][2] = lbl4;
+        
+        // J izq
+        matrizJizquierda[0][0] = lbl1;
+        matrizJizquierda[0][1] = lbl2;
+        matrizJizquierda[0][2] = lbl3;
+        matrizJizquierda[1][2] = lbl4;
+        
+        
+        
+        
+        
+        
+        
+        
+        //pintar tablero
+        
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                pnlPieza.add(matrizJizquierda[i][j]);
+            }
+            
+        }
+        
+        
+    }
     
     private void inicializar(){
+        pnlPieza.setOpaque(false);
         indice =0;
         estado = 0;
         lexema = "";
@@ -96,6 +263,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         modeloNivel = (DefaultTableModel) tblNiveles.getModel();
         
     }
+    
+    
     
     public VentanaPrincipal() {
         initComponents();
@@ -828,7 +997,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 10, -1, -1));
-        getContentPane().add(pnlPieza, new org.netbeans.lib.awtextra.AbsoluteConstraints(1390, 70, 510, 80));
+        getContentPane().add(pnlPieza, new org.netbeans.lib.awtextra.AbsoluteConstraints(1390, 70, 90, 80));
 
         fondo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         fondo.setForeground(new java.awt.Color(255, 255, 255));
@@ -994,24 +1163,35 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         listaTableros.add(tablero);
-        jugar();
+        pintarTablero();
+        pintarFigura();
+        llenarMatricesPiezas();
         System.out.println("cantidad tableros " + listaTableros.size());
-        
-        //System.out.println("Ultimo tablero: ");
-        //System.out.println(tablero);
         
         
     }//GEN-LAST:event_jButton4ActionPerformed
     
-    public void jugar(){
+    public void pintarFigura(){
+        DefaultTableModel tm = (DefaultTableModel) tblNiveles.getModel();
+        
+        //int datoX = Integer.parseInt(String.valueOf(tm.getValueAt(nivelActual-1 ,2)));
+        //int datoY = Integer.parseInt(String.valueOf(tm.getValueAt(nivelActual-1 ,3)));
+        pnlPieza.setLayout(new GridLayout(4, 4));
+        pnlPieza.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+        
+//        for (int i =0; i<(4*4); i++){
+//            final JLabel label = new JLabel(" ");
+//            label.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+//           pnlPieza.add(label);
+//        }
+        
+    }
+    
+    public void pintarTablero(){
         DefaultTableModel tm = (DefaultTableModel) tblNiveles.getModel();
         
         int datoX = Integer.parseInt(String.valueOf(tm.getValueAt(nivelActual-1 ,2)));
         int datoY = Integer.parseInt(String.valueOf(tm.getValueAt(nivelActual-1 ,3)));
-        
-        //int datoX = 12;
-        //int datoY = 12;
-        
         
         JOptionPane.showMessageDialog(null, "Dimensiones nivel: " + datoX + "," + datoY);
         pnlJuego.setLayout(new GridLayout(datoY, datoX));
