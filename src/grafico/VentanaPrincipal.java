@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
@@ -36,16 +37,28 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     ArrayList<String> listaLexemas;
     ArrayList<Pieza> listaPiezas;
     ArrayList<String> listaTableros;
+    /////// piezas rotadas
+    ArrayList<JLabel [][]> piezasI = new ArrayList();
+    ArrayList<JLabel [][]> piezasJ= new ArrayList();;
+    ArrayList<JLabel [][]> piezasL= new ArrayList();;
+    ArrayList<JLabel [][]> piezasO= new ArrayList();;
+    ArrayList<JLabel [][]> piezasS= new ArrayList();;
+    ArrayList<JLabel [][]> piezasZ= new ArrayList();;
+    ArrayList<JLabel [][]> piezasT= new ArrayList();;
+    ///////////////////////
     int indice; 
     int estado;
     String lexema;
     String nombreLetra;
     
+    String piezaActiva;
+    int rotacionActiva;
+    
     
     String tablero; // aqui guardar tablero
-    
+    int contadorPiezaTabla;
     int nivelActual;
-    
+    int numeroPieza;
     
     //variables para archivo de entrada1
     int dimX;
@@ -58,6 +71,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     DefaultTableModel modelo;
     DefaultTableModel modeloPieza;
     DefaultTableModel modeloNivel;
+    DefaultTableModel modeloError;
     
     //para matriz
     
@@ -140,7 +154,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 matrizOizquierda[i][j] = new JLabel(" ");
                 // S 
                 matrizSarriba[i][j] = new JLabel(" ");
-                matrizSabajo[i][j] = new JLabel(" ");
+                matrizSabajo[i][j] = new JLabel("#");
                 matrizSderecha[i][j] = new JLabel(" ");
                 matrizSizquierda[i][j] = new JLabel(" ");
                 // Z 
@@ -156,19 +170,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         }
         
-        JLabel lbl1 = new JLabel(" ");
+        JLabel lbl1 = new JLabel(".");
         lbl1.setBorder(BorderFactory.createLineBorder(Color.RED));
         lbl1.setBackground(Color.RED);
         lbl1.setOpaque(true);
-        JLabel lbl2 = new JLabel(" ");
+        JLabel lbl2 = new JLabel(".");
         lbl2.setBorder(BorderFactory.createLineBorder(Color.RED));
         lbl2.setBackground(Color.RED);
         lbl2.setOpaque(true);
-        JLabel lbl3 = new JLabel(" ");
+        JLabel lbl3 = new JLabel(".");
         lbl3.setBorder(BorderFactory.createLineBorder(Color.RED));
         lbl3.setBackground(Color.RED);
         lbl3.setOpaque(true);
-        JLabel lbl4 = new JLabel(" ");
+        JLabel lbl4 = new JLabel(".");
         lbl4.setBorder(BorderFactory.createLineBorder(Color.RED));
         lbl4.setBackground(Color.RED);
         lbl4.setOpaque(true);
@@ -177,22 +191,28 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         matrizIarriba[1][1] = lbl2;
         matrizIarriba[2][1] = lbl3;
         matrizIarriba[3][1] = lbl4;
+        
         // I abajo
         matrizIabajo[0][1] = lbl1;
         matrizIabajo[1][1] = lbl2;
         matrizIabajo[2][1] = lbl3;
         matrizIabajo[3][1] = lbl4;
         // I derecha
-        matrizIderecha[1][0] = lbl1;
-        matrizIderecha[1][0] = lbl2;
-        matrizIderecha[1][0] = lbl3;
-        matrizIderecha[1][0] = lbl4;
+        matrizIderecha[2][0] = lbl1;
+        matrizIderecha[2][1] = lbl2;
+        matrizIderecha[2][2] = lbl3;
+        matrizIderecha[2][3] = lbl4;
         
         // I izq
-        matrizIizquierda[1][0] = lbl1;
-        matrizIizquierda[1][0] = lbl2;
-        matrizIizquierda[1][0] = lbl3;
-        matrizIizquierda[1][0] = lbl4;
+        matrizIizquierda[2][0] = lbl1;
+        matrizIizquierda[2][1] = lbl2;
+        matrizIizquierda[2][2] = lbl3;
+        matrizIizquierda[2][3] = lbl4;
+        
+        piezasI.add(matrizIarriba);
+        piezasI.add(matrizIabajo);
+        piezasI.add(matrizIderecha);
+        piezasI.add(matrizIizquierda);
         
         ///////// letra J 
         
@@ -217,6 +237,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         matrizJizquierda[0][1] = lbl2;
         matrizJizquierda[0][2] = lbl3;
         matrizJizquierda[1][2] = lbl4;
+        
+        piezasJ.add(matrizIarriba);
+        piezasJ.add(matrizIabajo);
+        piezasJ.add(matrizIderecha);
+        piezasJ.add(matrizIizquierda);
         
         
         
@@ -243,6 +268,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         matrizLizquierda[1][2] = lbl3;
         matrizLizquierda[0][2] = lbl4;
         
+        piezasL.add(matrizLarriba);
+        piezasL.add(matrizLabajo);
+        piezasL.add(matrizLderecha);
+        piezasL.add(matrizLizquierda);
         
         
         ////////////// letra O
@@ -268,6 +297,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         matrizOizquierda[3][0] = lbl3;
         matrizOizquierda[3][1] = lbl4;
         
+        piezasO.add(matrizOarriba);
+        piezasO.add(matrizOabajo);
+        piezasO.add(matrizOderecha);
+        piezasO.add(matrizOizquierda);
         
         
         ////////////// letra S
@@ -293,6 +326,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         matrizSizquierda[1][1] = lbl3;
         matrizSizquierda[2][1] = lbl4;
         
+        piezasS.add(matrizSarriba);
+        piezasS.add(matrizSabajo);
+        piezasS.add(matrizSderecha);
+        piezasS.add(matrizSizquierda);
+        
         
         ////////////// letra Z
         
@@ -317,6 +355,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         matrizZizquierda[2][0] = lbl3;
         matrizZizquierda[3][0] = lbl4;
         
+        piezasZ.add(matrizZarriba);
+        piezasZ.add(matrizZabajo);
+        piezasZ.add(matrizZderecha);
+        piezasZ.add(matrizZizquierda);
+        
+        
+        
         ////////////// letra T
         
         // T arriba  y,x 
@@ -340,21 +385,27 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         matrizTizquierda[3][1] = lbl3;
         matrizTizquierda[2][0] = lbl4;
         
+        piezasT.add(matrizTarriba);
+        piezasT.add(matrizTabajo);
+        piezasT.add(matrizTderecha);
+        piezasT.add(matrizTizquierda);
+        
+        
         
         //pintar tablero
         
-        for (int i = 0; i < 4; i++) {
+        /*for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                pnlPieza.add(matrizLderecha[i][j]);
+                pnlPieza.add(matrizIderecha[i][j]);
             }
             
-        }
+        }*/
         
         
     }
     
     private void inicializar(){
-        pnlPieza.setOpaque(false);
+        //pnlPieza.setOpaque(false);
         indice =0;
         estado = 0;
         lexema = "";
@@ -371,12 +422,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         listaTokens = new ArrayList();
         listaLexemas = new ArrayList();
         listaTableros = new ArrayList();
-        
+        contadorPiezaTabla = 0;
         listaPiezas = new ArrayList();
-        
+        piezaActiva = "";
+        numeroPieza = 0;
         modelo=(DefaultTableModel) tblTokens.getModel(); 
         modeloPieza =(DefaultTableModel) tblPiezas.getModel();
         modeloNivel = (DefaultTableModel) tblNiveles.getModel();
+        modeloError = (DefaultTableModel) tblError.getModel();
         
     }
     
@@ -446,6 +499,16 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                             System.out.println(tablero);
                         }*/
                         estado = 0;
+                    }else{
+                      //error lex
+                      Object [] fila3=new Object[2]; 
+                        
+                        fila3[0] = "Error Lexico";
+                        fila3[1] = lexema;
+                        
+                        //fila[3] = contadorLinea;
+                        modeloError.addRow(fila3);
+                        tblError.setModel(modeloError);
                     }
                     break;
                 case 1:
@@ -463,8 +526,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         fila[2] = "archivo uno";
                         modelo.addRow(fila);
                         tblTokens.setModel(modelo);
-                        
-                        //System.out.println("identificador a aceptar: " + lexema);
                         
                         // aceptar y meter a tabla de llenado de nivel
                         Object[] niv = new Object[4];
@@ -694,9 +755,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     }
                     else{
                         //aqui es error lexico
-                        System.out.println("error lexico " + codigoAscii);
-                        estado = 0;
-                        listaErrores.add("" + lexema);
+                        
+                      Object [] fila3=new Object[2]; 
+                        
+                        fila3[0] = "Error Lexico";
+                        fila3[1] = lexema;
+                        
+                        //fila[3] = contadorLinea;
+                        modeloError.addRow(fila3);
+                        tblError.setModel(modeloError);
                     }
                     break;
                 case 1:
@@ -942,14 +1009,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         lblArchivo2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         pnlJuego = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnSiguientePieza = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblTokens = new javax.swing.JTable();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblError = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -1013,19 +1079,24 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel1.setText("Area De Juego");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1480, 10, 270, 50));
 
-        pnlJuego.setLayout(new java.awt.GridLayout());
+        pnlJuego.setLayout(new java.awt.GridLayout(1, 0));
         getContentPane().add(pnlJuego, new org.netbeans.lib.awtextra.AbsoluteConstraints(1390, 160, 510, 510));
 
-        jLabel2.setFont(new java.awt.Font("MS Reference Sans Serif", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Siguiente Pieza");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1230, 100, -1, -1));
-
         jButton1.setText("Rotar");
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1290, 270, 90, -1));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1290, 110, 90, -1));
 
-        jButton2.setText("Dejar Caer");
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1290, 320, -1, -1));
+        btnSiguientePieza.setText("Siguiente Pieza");
+        btnSiguientePieza.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguientePiezaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSiguientePieza, new org.netbeans.lib.awtextra.AbsoluteConstraints(1270, 160, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Lucida Console", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -1044,18 +1115,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 480, 510, 100));
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblError.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Tipo", "Error"
             }
         ));
-        jScrollPane4.setViewportView(jTable2);
+        jScrollPane4.setViewportView(tblError);
 
         getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 700, 510, 100));
 
@@ -1163,6 +1231,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenu2.add(jMenuItem5);
 
         jMenuItem6.setText("Jugar");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem6);
 
         jMenuBar1.add(jMenu2);
@@ -1176,6 +1249,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenu3.add(jMenuItem8);
 
         jMenuItem9.setText("Acerca De");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem9);
 
         jMenuBar1.add(jMenu3);
@@ -1286,6 +1364,330 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        //ROTAR
+        // ver pieza activa
+        
+        if(piezaActiva.equals("I")){
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    JLabel[][] matrizPintar = piezasI.get(0);
+                    pnlPieza.add(matrizPintar[i][j]);
+                }
+            }
+            
+        }
+        
+        
+        DefaultTableModel tm = (DefaultTableModel) tblPiezas.getModel();
+        String letra = String.valueOf(tm.getValueAt(nivelActual-1 ,2));
+        String direccion = String.valueOf(tm.getValueAt(nivelActual-1 ,3));
+        
+        
+        //JOptionPane.showMessageDialog(null, "Letra " + letra + " direccion: "+ direccion);
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        // TODO add your handling code here:
+        // JUGAR
+        listaTableros.add(tablero);
+        //pintarFigura();
+        llenarMatricesPiezas();
+        
+        jalarP();
+        
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    public void jalarP(){
+        //pnlPieza.removeAll();
+        //pnlPieza.repaint();
+        
+        pnlPieza.setLayout(new GridLayout(4, 4));
+        pnlPieza.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
+        
+        
+        DefaultTableModel tm = (DefaultTableModel) tblPiezas.getModel();
+        String letra = String.valueOf(tm.getValueAt(contadorPiezaTabla ,0));
+        String direccion = String.valueOf(tm.getValueAt( contadorPiezaTabla,1));
+        contadorPiezaTabla++;
+        
+        JOptionPane.showMessageDialog(null, "Letra " + letra + " direccion: "+ direccion);
+        
+        
+        pintarTablero();
+        
+        switch (letra) {
+            case "I":
+                piezaActiva = "I";
+                switch (direccion) {
+                    case "^":
+                        
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasI.get(0);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case "v":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasI.get(1);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case "<":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasI.get(3);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case ">":
+                        System.out.println("entro a derecha I");
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasI.get(2);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    default:
+                        break;
+                }   break;
+            case "J":
+                piezaActiva = "J";
+                switch (direccion) {
+                    case "^":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasJ.get(0);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case "v":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasJ.get(1);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case "<":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasJ.get(3);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case ">":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasJ.get(2);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    default:
+                        break;
+                }   break;
+            case "L":
+                piezaActiva = "L";
+                switch (direccion) {
+                    case "^":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasL.get(0);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case "v":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasL.get(1);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case ">":
+                        System.out.println("vamos a pintar L derecha");
+                        pnlPieza.removeAll();
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                //System.out.println("vamos a pintar L derecha");
+                                JLabel[][] matrizPintar = piezasL.get(2);
+                                JLabel labelT = matrizPintar[i][j];
+                                System.out.println("Posiciones: " + i + " j" +j + " val:" + labelT.getText() );
+                                pnlPieza.add(matrizPintar[i][j]);
+                                
+                            }
+                        }
+                        pnlPieza.repaint();
+                        break;
+                    case "<":
+                        
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasL.get(3);
+                                pnlPieza.add(matrizPintar[i][j]);
+                                //pnlPieza.add(matrizLderecha[i][j]);
+                            }
+                        }   break;
+                    default:
+                        break;
+                }   break;
+            case "O":
+                piezaActiva = "O";
+                switch (direccion) {
+                    case "^":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasO.get(0);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case "v":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasO.get(1);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case "<":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasO.get(3);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case ">":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasO.get(2);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    default:
+                        break;
+                }   break;
+            case "S":
+                piezaActiva = "S";
+                switch (direccion) {
+                    case "^":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasS.get(0);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case "v":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasS.get(1);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case "<":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasS.get(3);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case ">":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasS.get(2);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    default:
+                        break;
+                }   break;
+            case "Z":
+                piezaActiva = "Z";
+                switch (direccion) {
+                    case "^":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasZ.get(0);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case "v":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasZ.get(1);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case "<":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasZ.get(3);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case ">":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasZ.get(2);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    default:
+                        break;
+                }   break;
+            case "T":
+                piezaActiva = "T";
+                switch (direccion) {
+                    case "^":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasT.get(0);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case "v":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasT.get(1);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case "<":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasT.get(3);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    case ">":
+                        for (int i = 0; i < 4; i++) {
+                            for (int j = 0; j < 4; j++) {
+                                JLabel[][] matrizPintar = piezasT.get(2);
+                                pnlPieza.add(matrizPintar[i][j]);
+                            }
+                        }   break;
+                    default:
+                        break;
+                }   break;
+            default:
+                break;
+        }
+        pnlPieza.repaint();
+    }
+    
+    private void btnSiguientePiezaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguientePiezaActionPerformed
+        // TODO add your handling code here:
+        // siguiente pieza
+        //pnlPieza.removeAll();
+        jalarP();
+        //pnlPieza.repaint();
+        
+    }//GEN-LAST:event_btnSiguientePiezaActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(null, "Practica hecha por Randall Ramos / 201602869");
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
     
     public void pintarFigura(){
         DefaultTableModel tm = (DefaultTableModel) tblNiveles.getModel();
@@ -1309,7 +1711,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         int datoX = Integer.parseInt(String.valueOf(tm.getValueAt(nivelActual-1 ,2)));
         int datoY = Integer.parseInt(String.valueOf(tm.getValueAt(nivelActual-1 ,3)));
         
-        JOptionPane.showMessageDialog(null, "Dimensiones nivel: " + datoX + "," + datoY);
+        //JOptionPane.showMessageDialog(null, "Dimensiones nivel: " + datoX + "," + datoY);
         pnlJuego.setLayout(new GridLayout(datoY, datoX));
         pnlJuego.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
         
@@ -1375,10 +1777,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
         
         
-        //JButton btnTest = new JButton();
-        //btnTest.setText("0");
-        //pnlJuego.add(btnTest);
-        
     }
     
     /**
@@ -1419,13 +1817,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem abrirArchivoDos;
     private javax.swing.JMenuItem abrirArchivoUno;
+    private javax.swing.JButton btnSiguientePieza;
     private javax.swing.JLabel fondo;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1449,11 +1846,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTable jTable2;
     private javax.swing.JLabel lblArchivo1;
     private javax.swing.JLabel lblArchivo2;
     private javax.swing.JPanel pnlJuego;
     private javax.swing.JPanel pnlPieza;
+    private javax.swing.JTable tblError;
     private javax.swing.JTable tblNiveles;
     private javax.swing.JTable tblPiezas;
     private javax.swing.JTable tblTokens;
